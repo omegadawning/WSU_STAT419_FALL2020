@@ -9,7 +9,7 @@ sep <- sep[-2]
 
 temp_df <- sep
 
-temp_df$X1 <- format(as.Date(temp_df$X1), "%U")
+#temp_df$X1 <- format(as.Date(temp_df$X1), "%U")
 colnames(temp_df) <- "WEEK"
 
 sep_trip <- data.frame(do.call("rbind", strsplit(as.character(sep$X1), "/", fixed=TRUE)))
@@ -31,7 +31,7 @@ my_data <- my_data[order(-my_data$YEAR, -my_data$WEEK),]
 list_temp <- unique(my_data$md5_email)
 
 dup <- my_data
-dup <- dup %>% unique(md5_email)
+#dup <- dup %>% unique(md5_email)
 set.seed(123)
 dup <- dup %>% filter(! duplicated(md5_email))
 
