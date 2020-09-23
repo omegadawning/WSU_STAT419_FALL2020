@@ -17,7 +17,7 @@ year_df <- data.frame(matrix(sep_trip$X3))
 
 year_df$matrix.sep_trip.X3. <- as.numeric(as.character(year_df$matrix.sep_trip.X3.))
 colnames(year_df) <- "YEAR"
-temp_df$X1 <- as.Date(temp_df$X1, format = "%m/%d/%Y")
+#temp_df$X1 <- as.Date(temp_df$X1, format = "%m/%d/%Y")
 
 my_data <- my_data[-2]
 my_data$YEAR <- year_df$YEAR
