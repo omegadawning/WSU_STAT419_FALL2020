@@ -9,3 +9,7 @@ library(tractor.base);  # implode
 library(stringr);
 library(rvest);			# imdb web scraping
 
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(tidyverse)
