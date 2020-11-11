@@ -45,14 +45,7 @@ prepareMeasureData = function(measure)
   
   # summary(measure_remove_dup);
   
-  # separate genders
-  measure_male <- subset(measure_remove_dup, gender=="male");
-  measure_female <- subset(measure_remove_dup, gender=="female");
-  
-  
-  # measure_male; # full male measurements
-  # measure_female; # full female measurements
-  return(measure_male, measure_female);
+  return(measure_remove_dup);
   }
 
 
