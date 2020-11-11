@@ -82,7 +82,7 @@ arm_measurementsSubset = function(x)
   return(x.2);  
   }
 
-average_Dataframe = function(x)
+average_Dataframe = function(x, i)
   {
   avg_fromData <- colMeans(x, na.rm=TRUE);
   
@@ -99,7 +99,7 @@ average_Dataframe = function(x)
   m_avg_ea <- (avg.df$elbow.armpit.left+avg.df$elbow.armpit.right)/2; 
   
   # create vector for the new dataframe
-  avg_row <- c(0, avg.df$height.NA, m_avg_hl, m_avg_hw, m_avg_he, m_avg_ea, avg.df$arm.span.NA);
+  avg_row <- c(i, avg.df$height.NA, m_avg_hl, m_avg_hw, m_avg_he, m_avg_ea, avg.df$arm.span.NA);
   
   # create and populate average dataframe
   m_arm <- data.frame(matrix(ncol=7, nrow=0));
