@@ -68,16 +68,16 @@ arm_measurementsSubset = function(x)
   x.1 <- x[,c(4,7,8,9,10,11,12,13,14,17)];
   
   # omit NAs
-  x.1 <- na.omit(x.1);
+  x.2 <- na.omit(x.1);
     
   # find and remove outliers
-  for(column in colnames(x.1))
+  for(column in colnames(x.2))
     {
-    Q1 <- quantile(x.1[[column]], .25);
-    Q3 <- quantile(x.1[[column]], .75);
-    IQR <- IQR(x.1[[column]]);
+    Q1 <- quantile(x.2[[column]], .25);
+    Q3 <- quantile(x.2[[column]], .75);
+    IQR <- IQR(x.2[[column]]);
       
-    x.2 <- subset(x.1, x.1[[column]]>(Q1-1.5*IQR) & x.1[[column]]<(Q3+1.5*IQR));
+    x.3 <- subset(x.2, x.2[[column]]>(Q1-1.5*IQR) & x.2[[column]]<(Q3+1.5*IQR));
     }
-  return(x.2);  
+  return(x.3);  
   }
