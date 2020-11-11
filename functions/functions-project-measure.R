@@ -77,7 +77,7 @@ arm_measurementsSubset = function(x)
     Q3 <- quantile(x.2[[column]], .75);
     IQR <- IQR(x.2[[column]]);
       
-    x.3 <- subset(x.2, x.2[[column]]>(Q1-1.5*IQR) & x.2[[column]]<(Q3+1.5*IQR));
+    x.2 <- subset(x.2, x.2[[column]]>(Q1-1.5*IQR) & x.2[[column]]<(Q3+1.5*IQR));
     }
-  return(x.3);  
+  return(x.2);  
   }
