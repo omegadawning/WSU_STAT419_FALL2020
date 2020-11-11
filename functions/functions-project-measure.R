@@ -81,3 +81,42 @@ arm_measurementsSubset = function(x)
     }
   return(x.2);  
   }
+
+average_Dataframe = function(x)
+  {
+  avg_fromData <- colMeans(x, na.rm=TRUE);
+  
+  # convert the avgs to a dataframe
+  avg.df <- as.data.frame(t(avg_fromData));
+  
+  # male_avg; # averages of male measurements
+  # female_avg; # averages of female measurements
+  
+  # average the left and right arm/hand measurements
+  m_avg_hl <- (avg.df$hand.length.left+avg.df$hand.length.right)/2;
+  m_avg_hw <- (avg.df$hand.width.left+avg.df$hand.width.right)/2;
+  m_avg_he <- (avg.df$hand.elbow.left+avg.df$hand.elbow.right)/2;
+  m_avg_ea <- (avg.df$elbow.armpit.left+avg.df$elbow.armpit.right)/2; 
+  
+  # create vector for the new dataframe
+  avg_row <- c(0, avg.df$height.NA, m_avg_hl, m_avg_hw, m_avg_he, m_avg_ea, avg.df$arm.span.NA);
+  
+  # create and populate average dataframe
+  m_arm <- data.frame(matrix(ncol=7, nrow=0));
+  m_arm <- rbind(m_arm, avg_row);
+  colnames(m_arm) <- c('gender','avg.height', 'avg.hand.length', 'avg.hand.width', 'avg.hand.elbow', 'avg.elbow.armpit', 'avg.span');
+  
+  # average arm length for male and female using individual hand, forearm and upper arm measurements
+  avg_arm_length <- m_arm$avg.hand.length+m_arm$avg.hand.elbow+m_arm$avg.elbow.armpit;
+  
+  # percentages of each part of arm for male and female
+  # add to dataframe
+  m_arm$hand.perc <- (m_arm$avg.hand.length/avg_arm_length)*100;
+  m_arm$forearm.perc <- (m_arm$avg.hand.elbow/avg_arm_length)*100;
+  m_arm$upper.arm.perc <- (m_arm$avg.elbow.armpit/avg_arm_length)*100;
+  
+  # percentages of arm span in respect to height
+  m_arm$span.perc <- (m_arm$avg.span/m_arm$avg.height)*100;
+  
+  return(m_arm);
+  }
