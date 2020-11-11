@@ -1,6 +1,6 @@
 
 
-prepareMeasureData = function(df)
+prepareMeasureData = function(measure)
   {
   # remove any columns that are only NA
   measure <- measure[colSums(!is.na(measure)) > 0];
