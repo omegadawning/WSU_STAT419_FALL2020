@@ -62,7 +62,7 @@ sep_Female = function(x)
   return(measure_female);
   }
 
-subset_armMeasurements = function(x)
+arm_measurementsSubset = function(x)
   {
   # pull arm and height data
   x.1 <- x[,c(4,7,8,9,10,11,12,13,14,17)];
