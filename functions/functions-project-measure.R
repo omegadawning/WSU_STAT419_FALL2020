@@ -99,12 +99,12 @@ average_Dataframe = function(x, i)
   m_avg_ea <- (avg.df$elbow.armpit.left+avg.df$elbow.armpit.right)/2; 
   
   # create vector for the new dataframe
-  avg_row <- c(i, avg.df$height.NA, m_avg_hl, m_avg_hw, m_avg_he, m_avg_ea, avg.df$arm.span.NA);
+  avg_row <- c(avg.df$height.NA, m_avg_hl, m_avg_hw, m_avg_he, m_avg_ea, avg.df$arm.span.NA);
   
   # create and populate average dataframe
-  m_arm <- data.frame(matrix(ncol=7, nrow=0));
+  m_arm <- data.frame(matrix(ncol=6, nrow=0));
   m_arm <- rbind(m_arm, avg_row);
-  colnames(m_arm) <- c('gender','avg.height', 'avg.hand.length', 'avg.hand.width', 'avg.hand.elbow', 'avg.elbow.armpit', 'avg.span');
+  colnames(m_arm) <- c('avg.height', 'avg.hand.length', 'avg.hand.width', 'avg.hand.elbow', 'avg.elbow.armpit', 'avg.span');
   
   # average arm length for male and female using individual hand, forearm and upper arm measurements
   avg_arm_length <- m_arm$avg.hand.length+m_arm$avg.hand.elbow+m_arm$avg.elbow.armpit;
