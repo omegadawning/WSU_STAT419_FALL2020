@@ -1,59 +1,59 @@
 
-#' doSampleVariance
-#'
-#' Computes the sample variance with (n-1) ...
-#' 
-#' @param x numeric vector
-#' @param method "two-pass" prevents "naive" floating-point issues
-#'
-#' @return list (x.bar, s.var, s.sd)
-#' @export
-#'
-#' @examples
-#' doSampleVariance( c(1) ); # returns null
-#' doSampleVariance( 1:2 ); 
-#' 
-doSampleVariance = function(x, method="two-pass")
-	{
-	x = na.omit(x);
-	if(method=="naive")
-		{
-		n = 0;
-		sum = 0;
-		sum2 = 0;
-		
-		for(i in 1:length(x))  ## na.omit(x)
-			{
-			n = n + 1;
-			sum = sum + x[i];
-			sum2 = sum2 + x[i]*x[i];
-			}
-		
-		if(n < 2) { return(NULL);} # 
-			x.bar = sum/n;
-			s.var = (sum2 - (sum*sum)/n)/(n-1);
 
-		} else	{
-				# two-pass algorithm # testing
-				n = sum = sum2 = 0;
-				## first pass 
-				for(i in 1:length(x))  ## na.omit(x)
-					{
-					n = n + 1;
-					sum = sum + x[i];
-					}
-		if(n < 2) { return(NULL);} # 
-				x.bar = sum/n;
-				## second pass 
-				for(i in 1:length(x))  ## na.omit(x)
-					{
-					deviation = x[i] - x.bar;
-					sum2 = sum2 + deviation * deviation;
-					}
-				s.var = sum2/(n-1);
-				}
+prepareMeasureData = function(df)
+  {
+  # remove any columns that are only NA
+  measure <- measure[colSums(!is.na(measure)) > 0];
+  
+  # how many NAs per row
+  na_rows <- rowSums(is.na(measure));
+  # will remove NAs later after I select the cols I need
+  
+  # convert to lower case
+  measure[[27]] <- tolower(measure[[27]]);
+  measure[[28]] <- tolower(measure[[28]]);
+  measure[[29]] <- tolower(measure[[29]]);
+  measure[[30]] <- tolower(measure[[30]]);
+  measure[[31]] <- tolower(measure[[31]]);
+  measure[[33]] <- tolower(measure[[33]]);
+  measure[[36]] <- tolower(measure[[36]]);
+  
+  # convert inches to cm
+  for (row in 1:nrow(measure))
+  {
+    units = measure[row, "units"]
+    if(units!='cm')
+    {
+      measure[row, 4:26] <- measure[row, 4:26]*2.54
+      measure[row, 27] <- 'cm'
+    }
+  };
+  
+  
+  # remove duplicates
+  measure_remove_dup <- removeDuplicatesFromDataFrameAllColumns(measure);
+  
+  # clean up ethnicities
+  measure_remove_dup$ethnicity[measure_remove_dup$ethnicity=='caucasain'] <- "caucasian"
+  measure_remove_dup$ethnicity[measure_remove_dup$ethnicity=='asain'] <- "asian"
+  measure_remove_dup$ethnicity[measure_remove_dup$ethnicity=='white non-hispanic'] <- "caucasian"
+  measure_remove_dup$ethnicity[measure_remove_dup$ethnicity=='white'] <- "caucasian"
+  
+  # clean up gender
+  measure_remove_dup$gender[measure_remove_dup$gender=='m'] <- "male"
+  measure_remove_dup$gender[measure_remove_dup$gender=='f'] <- "female"
+  
+  # summary(measure_remove_dup);
+  
+  # separate genders
+  measure_male <- subset(measure_remove_dup, gender=="male");
+  measure_female <- subset(measure_remove_dup, gender=="female");
+  
+  
+  # measure_male; # full male measurements
+  # measure_female; # full female measurements
+  return(measure_male, measure_female);
+  }
 
-		s.sd = sqrt(s.var);
-	list("x.bar"=x.bar,"s.var"=s.var,"s.sd"=s.sd);
-	}
+
 
