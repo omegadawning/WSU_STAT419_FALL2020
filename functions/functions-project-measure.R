@@ -49,4 +49,14 @@ prepareMeasureData = function(measure)
   }
 
 
+sep_Male = function(x)
+  {
+  measure_male <- subset(x, gender=="male");
+  return(measure_male);
+  }
 
+sep_Female = function(x)
+  {
+  measure_female <- subset(x, gender=="female");
+  return(measure_female);
+  }
