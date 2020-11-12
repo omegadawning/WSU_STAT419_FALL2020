@@ -131,6 +131,10 @@ make_bar_plots = function(m_f_avg)
   file.hw = paste0(path.figures,"hw-bar.pdf");
   file.arm.bar = paste0(path.figures,"arm-bar.pdf");
   file.percent = paste0(path.figures,"arm-percent.pdf");
+  file.forearm = paste0(path.figures,"fa-percent.pdf");
+  file.forearm.close = paste0(path.figures,"fac-percent.pdf");
+  file.hand = paste0(path.figures,"h-percent.pdf");
+  file.hand.close = paste0(path.figures,"hc-percent.pdf");
   #####
   
   # separate data for plot
@@ -172,4 +176,58 @@ make_bar_plots = function(m_f_avg)
           font.lab=2, cex.lab=1, args.legend=list(x="topright", bty="n", 
                                                   inset=c(0,0)));
   dev.off(); 
+  
+  m_f_avg_forearm <- m_f_avg[,c(1,4)];
+  male_fore_per <- (m_f_avg_forearm$avg.height[1]/4);
+  female_fore_per <- (m_f_avg_forearm$avg.height[2]/4);
+  m_f_avg_forearm <- as.matrix(m_f_avg_forearm);
+  
+  m_f_avg_hand <- m_f_avg[,c(1,2)];
+  male_hand_per <- (m_f_avg_hand$avg.height[1]/10);
+  female_hand_per <- (m_f_avg_hand$avg.height[2]/10);
+  m_f_avg_hand <- as.matrix(m_f_avg_hand);
+  
+  pdf(file.forearm);
+  barplot(m_f_avg_forearm, beside=T, ylim=c(0,200), col=c("orange","blue"), las=1, 
+          cex.names=.7, legend.text=rownames(m_f_avg),
+          names.arg=c("Average Height", "Average Forearm Length"),
+          xlab="Comparing Average Height to Average Forearm Length", 
+          font.lab=2, cex.lab=1, args.legend=list(x="topright", bty="n", 
+                                                  inset=c(0,0)));
+  abline(h=male_fore_per, col="orange", lty=5);
+  abline(h=female_fore_per, col="blue", lty=5);
+  dev.off();
+  
+  pdf(file.forearm.close);
+  barplot(m_f_avg_forearm, beside=T, ylim=c(0,50), col=c("orange","blue"), las=1, 
+          cex.names=.7, legend.text=rownames(m_f_avg),
+          names.arg=c("Average Height", "Average Forearm Length"),
+          xlab="Comparing Average Height to Average Forearm Length", 
+          font.lab=2, cex.lab=1, args.legend=list(x="topright", bty="n", 
+                                                  inset=c(0,-.10)));
+  abline(h=male_fore_per, col="orange", lty=5);
+  abline(h=female_fore_per, col="blue", lty=5);
+  dev.off();
+  
+  pdf(file.hand);
+  barplot(m_f_avg_hand, beside=T, ylim=c(0,200), col=c("orange","blue"), las=1, 
+          cex.names=.7, legend.text=rownames(m_f_avg),
+          names.arg=c("Average Height", "Average Hand Length"),
+          xlab="Comparing Average Height to Average Hand Length", 
+          font.lab=2, cex.lab=1, args.legend=list(x="topright", bty="n", 
+                                                  inset=c(0,0)));
+  abline(h=male_hand_per, col="orange", lty=5);
+  abline(h=female_hand_per, col="blue", lty=5);
+  dev.off();
+  
+  pdf(file.hand.close);
+  barplot(m_f_avg_hand, beside=T, ylim=c(0,25), col=c("orange","blue"), las=1, 
+          cex.names=.7, legend.text=rownames(m_f_avg),
+          names.arg=c("Average Height", "Average Hand Length"),
+          xlab="Comparing Average Height to Average Hand Length", 
+          font.lab=2, cex.lab=1, args.legend=list(x="topright", bty="n", 
+                                                  inset=c(0,0)));
+  abline(h=male_hand_per, col="orange", lty=5);
+  abline(h=female_hand_per, col="blue", lty=5);
+  dev.off();
   }
