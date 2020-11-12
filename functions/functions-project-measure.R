@@ -119,4 +119,57 @@ average_Dataframe = function(x, i)
   m_arm$span.perc <- (m_arm$avg.span/m_arm$avg.height)*100;
   
   return(m_arm);
+}
+
+make_bar_plots = function(m_f_avg)
+  {
+  path.project = "D:/Users/Omegadawning/Desktop/School/Fall_2020/Multivariate_Stat/_git_/WSU_STAT419_FALL2020/Project/";
+  path.figures = paste0(path.project,"figures/");
+    createDirRecursive(path.figures);
+  
+  ##### working here on saving pdfs
+  file.hw = paste0(path.figures,"hw-bar.pdf");
+  file.arm.bar = paste0(path.figures,"arm-bar.pdf");
+  file.percent = paste0(path.figures,"arm-percent.pdf");
+  #####
+  
+  # separate data for plot
+  m_f_avg_height_span <- m_f_avg[,c(1,6)];
+  m_f_avg_arm <- m_f_avg[,c(2,3,4,5)];
+  m_f_avg_perc <- m_f_avg[,c(7,8,9)];
+  
+  # row names for legend
+  row.names(m_f_avg) <- c("male","female");
+  
+  # convert to matrix for plot
+  m_f_avg_hs <- as.matrix(m_f_avg_height_span);
+  m_f_avg_a <- as.matrix(m_f_avg_arm);
+  m_f_avg_p <- as.matrix(m_f_avg_perc);
+  
+  # plot the data to compare male and female
+  pdf(file.hw);
+  barplot(m_f_avg_hs, beside=T, ylim=c(0,200), col=c("orange","blue"), 
+          las=1, cex.names=.8, legend.text=rownames(m_f_avg),
+          names.arg=c("Average Height", "Average Wingspan"), 
+          xlab="Comparing Average Height and Wingspan (in cm)", 
+          font.lab=2, cex.lab=1, args.legend=list(x="topright", 
+                                                  bty="n", inset=c(0,-0.1)));
+  dev.off();
+  pdf(file.arm.bar);
+  barplot(m_f_avg_a, beside=T, ylim=c(0,50), col=c("orange","blue"), 
+          las=1, cex.names=.7, legend.text=rownames(m_f_avg),
+          names.arg=c("Average Hand Length", "Average Hand Width", 
+                      "Average Forearm Length", "Average Upper Arm Length"),
+          xlab="Comparing Average Arm Measurements (in cm)", font.lab=2, 
+          cex.lab=1, args.legend=list(x="topright", bty="n", inset=c(0,0)));
+  dev.off();
+  pdf(file.percent);
+  barplot(m_f_avg_p, beside=T, ylim=c(0,60), col=c("orange","blue"), las=1, 
+          cex.names=.7, legend.text=rownames(m_f_avg),
+          names.arg=c("Hand-to-Arm Percentage", "Forearm-to-Arm Percentage", 
+                      "Upper Arm-to-Arm Percentage"),
+          xlab="Comparing Percentages of Full Arm (percent of whole)", 
+          font.lab=2, cex.lab=1, args.legend=list(x="topright", bty="n", 
+                                                  inset=c(0,0)));
+  dev.off(); 
   }
