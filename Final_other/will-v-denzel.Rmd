@@ -1,0 +1,517 @@
+---
+output:
+  pdf_document:
+    keep_tex: true
+    fig_caption: true
+    toc: true
+    toc_depth: 3 
+    number_sections: true
+    citation_package: natbib
+    latex_engine: pdflatex
+    template: ./../latex-templates/report.tex
+  html_document:
+    df_print: paged
+    
+title: "The Proportions of Man (and Woman)"
+subtitle: "Does the Vitruvian Man Still Stand?"
+author: 
+- name: "Chris Vickers"
+  affiliation: "Washington State University"
+keywords: |
+    linear regression; spearman's rank correlation; pearson pairwise correlation
+abstract: |
+  In this article I compare the proportions of Leonardo Da Vinci's Vitruvian Man to the actual proportions of persons, partitioned by gender. I also analyze how male and female arm and hand proportions differ with respect to height and how the height of a human body correlates to the length of outstretched arms. The analysis was performed on on data from 152 individuals gathered by students at Washington State University. It was determined that the proportions proposed by Leonardo Da Vinci and Vitruvius hold true within one percent of variance. The height of an individual is ten times the length of their hand or four times the length of their forearm, regardless of gender. 
+  
+sectionnumberdepth: 3
+titleEndnotes: "ENDNOTES"
+titleReferences: "REFERENCES"
+columnsReferences: 2
+titleTOC:  "TABLE OF CONTENTS"
+bibliography: ./../biblio/master.bib
+bibliostyle: ./../biblio/ormsv080.bst
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+\section{Introduction}
+\label{sec:intro}
+
+“The proportions of the human body according to Vitruvius”, or the Vitruvian Man by Leonardo Da Vinci examines perfect proportions for the human body. The artwork was based on the notes by Vitruvian Pollio, an architect and author of the Building Guide. Both Vitruvian and Da Vinci recognized the importance of the human body’s proportions. While the Building Guide used the human body as a tool for measurement and design, Da Vinci’s Vitruvian Man examined the mathematical side of body proportions. In ancient times, the proportions of 1:3, 1:4, 1:6, 1:8, and 1:10  were the proportions appropriate to man \citep{Craven:2018}.
+\newline
+\begin{figure}[!ht]
+%% figures have hrule, tables have hline
+	\hrule
+	\caption{ \textbf{Da Vinci's Vitruvian Man \citep{WorldMysteries:2020}} }
+	\begin{center}
+	    \scalebox{0.35}{	\includegraphics[trim = 25mm 25mm 25mm 25mm,clip,width=\textwidth]{pdfs/vitruvian_man.pdf} }
+	\end{center}
+	\label{fig:vitruvian-man}
+	\hrule
+\end{figure}
+
+Ten Books on Architecture, Chapter 1: \newline \indent \indent "On Symmetry: In Temples And In The Human Body" \citep{Vitruvius:2020}:
+\begin{quote}
+For the human body is so designed by nature that the face, from the chin to the top of the forehead and the lowest roots of the hair, is a tenth part of the whole height; the open hand from the wrist to the tip of the middle finger is just the same; the head from the chin to the crown is an eighth, and with the neck and shoulder from the top of the breast to the lowest roots of the hair is a sixth; from the middle of the breast to the summit of the crown is a fourth. If we take the height of the face itself, the distance from the bottom of the chin to the under side of the nostrils is one third of it; the nose from the under side of the nostrils to a line between the eyebrows is the same; from there to the lowest roots of the hair is also a third, comprising the forehead. The length of the foot is one sixth of the height of the body; of the forearm, one fourth; and the breadth of the breast is also one fourth. The other members, too, have their own symmetrical proportions, and it was by employing them that the famous painters and sculptors of antiquity attained to great and endless renown. Similarly, in the members of a temple there ought to be the greatest harmony in the symmetrical relations of the different parts to the general magnitude of the whole. Then again, in the human body the central point is naturally the navel. For if a man be placed flat on his back, with his hands and feet extended, and a pair of compasses centred at his navel, the fingers and toes of his two hands and feet will touch the circumference of a circle described therefrom. And just as the human body yields a circular outline, so too a square figure may be found from it. For if we measure the distance from the soles of the feet to the top of the head, and then apply that measure to the outstretched arms, the breadth will be found to be the same as the height, as in the case of plane surfaces which are perfectly square.
+\end{quote}
+\vspace{0.1in}
+Of Vitruvius’s proportions, this article focuses on: the open hand from the wrist to the tip of the middle finger is a tenth part of the whole body, the length of the forearm is one fourth the height of the body, and the length from the soles of the feet to the top of the head is equal to the measure of outstretched arms. \newline \newline
+In this paper I will examine the proportions laid out by Vitruvius and Da Vinci and compare their mathematical guidelines to modern day measurements. I will also explore how those proportions compare between male and females. 
+
+
+\vspace{0.5in}
+\begin{figure}[!ht]
+  \hrule
+  \caption{ \textbf{Male and Female Height Distribution}}
+    \begin{subfigure}[h]{0.4\textwidth}
+    \centering
+    %  trim={<left> <lower> <right> <upper>}
+    % https://shantoroy.com/latex/add-subfig-in-latex/
+            \includegraphics[trim = 0 0 0 0,clip,scale=.4]{figures/male-hist.pdf}
+        \label{fig:sub-first}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.4\textwidth}
+    \centering
+        \includegraphics[trim = 0 0 0 0,clip,scale=.4]{figures/female-hist.pdf}
+        \label{fig:sub-second}
+    \end{subfigure}
+    \vspace{2.5mm}
+    \label{fig:height-dist}
+  \hrule
+\end{figure}
+
+
+\section{Research Question:  What is my primary question}
+\label{sec:rq}
+
+\textbf{How do Vitruvius and Da Vinci’s perfect proportions compare to modern day humans?}\newline
+I will examine the  proportions documented in the Vitruvian Man sketch and Vitruvius' Building Guide and compare them to the measurements gathered. Have the proportions of humans changed since 1490? 
+
+
+\subsection{What is my secondary question}
+\label{sec:rq2}
+
+\textbf{How does height compare to wingspan between males and females?} \newline
+According to the Vitruvian Man, wingspan and height are found to be equivalent, as in the case of plane surfaces which are perfectly square. Not only do I investigate this claim, but I also observe if gender influences this notion. 
+
+
+\subsection{What is my other secondary question}
+\label{sec:rq3}
+
+\textbf{How do the proportions of a male and female arm compare?} \newline
+Do men and women share the same hand, forearm, and upper arm proportions?  
+
+
+\section{Data Description}
+\label{sec:data}
+
+The data used is a collection of body measurements obtained by students in the multi-variate statistics course (STAT 419) at Washington State University. We collected twenty-three body measurements and information about dominant eye and hand, eye color, ethnicity, age, gender, and more\footnote{Complete list of fields and descriptions: \newline {data_collector} - encrypted ID of the data collector \newline {person_id} - encrypted ID of the individual being measured \newline {side} - documented side of measurement [invalid] \newline {height.NA} – standing; flat-footed from floor to top of head \newline {head.height.NA} - length from bottom of chin to top of head \newline {head.circumference.NA} - the circumference of the upper head \newline {hand.length.left} - length from wrist to tip of fingers (left) \newline {hand.length.right} - length from wrist to tip of fingers (right) \newline {hand.width.left} - width, from the tip of pinky to the tip of thumb, of sprawled hand (left) \newline {hand.width.right} - width, from the tip of pinky to the tip of thumb, of sprawled hand (right) \newline {hand.elbow.left} – length from inner wrist to elbow (left) \newline {hand.elbow.right} – length from inner wrist to elbow (right) \newline {elbow.armpit.left} – length from inner elbow to armpit (left) \newline {elbow.armpit.right} – length from inner elbow to armpit (right) \newline {arm.reach.left} – standing reach upwards from floor to tip of fingers (left) \newline {arm.reach.right} – standing reach upwards from floor to tip of fingers (right) \newline {arm.span.NA} - the wingspan measurement from fingertip to fingertip \newline {foot.length.left} – length of foot from back of heel to tip of toes (left) \newline {foot.length.right} – length of foot from back of heel to tip of toes (right) \newline {floor.kneepit.left} – sitting; distance from floor to pit of knee (left) \newline {floor.kneepit.right} – sitting; distance from floor to pit of knee (right) \newline {floor.hip.left} – standing; distance from floor to hip (left) \newline {floot.hip.right} – standing; distance from floor to hip (right) \newline {floor.navel.NA} – standing; distance from floor to navel \newline {floor.armpit.left} – standing; distance from floor to armpit (left) \newline {floor.armpit.right} – standing; distance from floor to armpit (right) \newline {units} – unit of measurement used (inches, cm, etc) \newline {writing} – dominant writing hand of participant \newline {eye} – dominant eye of participant \newline {eye_color} – eye color of participant \newline {swinging} – arm used for swinging baseball bat or golf club \newline {age} – age of participant \newline {gender} – gender of participant \newline {quality} – quality score of measurement between 0 and 10; given by student \newline {minutes} – measurement duration in minutes; documented by student \newline {ethnicity} – ethnicity of participant \newline {notes} – any additional notes provided by student \newline }. The raw data consists of 428 measurement sets collected from family, friends, and the students themselves.
+\newline
+\newline
+Due to COVID-19, not all measurements were collected by students. Some measurements were collected by friends or family and delivered to the student. All data entries include an encrypted data collector identification along with the identification of the subject being measured. Each entry also includes a quality score, length of time taken to perform measurements, and notes pertaining to the measurement\footnote{The raw data set of measurements consists of encrypted identifications for the data collector and the individual being measured. The ethnicity, gender, dominant eye, eye color, writing hand, swinging hand, and unit of measurement used (centimeters or inches) in the original collection is documented. As mentioned in the paper, each entry is accompanied by an optional note entry detailing the measurement, how long (in minutes) the measurement took to complete, and a quality score determined by the student. \newline \newline The data was collected under the assumption of proper collecting methods and accurate measurements. Some students relied on other persons to measure for them and in some cases the measurements were collected out of sight of the students. It is also assumed that the quality score and duration of measurement are true. While information on the location of participants is unavailable, it can be expected that the majority of participants are located within the United States.\newline}.
+
+
+
+\subsection{Summary of Sample}
+\label{sec:data-sample}
+
+Of the original data set, I chose height, hand length, hand width, forearm length, upper arm length, and wingspan to analyze. Narrowing my data down to these covariates allowed me to focus on a smaller data pool to work with. After cleaning and processing the data, I was left with 152 participant measurements partitioned by gender\footnote{While eliminating outliers was important for my analysis, it must be stated that body measurements can realistically fall outside of the bulk of the data with outliers. By separating my data according to quantile to eliminate mismeasurements and documentation errors, it is possible that I eliminated valid abnormal body measurements. \newline}. Comprising my data set are 70 male participants and 82 female participants.
+
+\subsection{Summary Statistics of Data}
+\label{sec:data-summary}
+
+Correlation tables including the mean and standard deviation of the male and female measurements are included below. 
+\newpage
+
+\input{tables/tree-correlation-table}
+
+\newpage
+
+\input{tables/tree-correlation-table-2}
+
+\newpage
+
+
+\section{Key Findings}
+\label{sec:findings}
+
+Proportions from the average measurements in my data set are equivalent to that of Da Vinci’s Vitruvian Man. Hand length proportions in relation to height in my data (10.96% for males and 9.92% for females) are both within one percent of the 1:10 ratio . Forearm length proportions in relation to height also fall within one percent (25.61% for males and 25.42% for females) of the twenty-five percent guideline (shown in Figure \ref{fig:forearm-height}. There is slightly more variance in the proportions of arm span and height. The average arm span for men was 1.10% over the 1:1 ratio, but female arm spans were still within a one percent change (100.56%). See Figure \ref{fig:hw-bar}. \newline
+
+\vspace{0.15in}
+\begin{figure}[!ht]
+  \hrule
+    \caption{ \textbf{Comparing Average Forearm Length and Hand Length to Average Height}}
+    \begin{subfigure}[h]{0.5\textwidth}
+    \centering
+    %  trim={<left> <lower> <right> <upper>}
+    % https://shantoroy.com/latex/add-subfig-in-latex/
+            \includegraphics[trim = 0 0 0 0,clip,scale=.4]{figures/fa-percent.pdf}
+        \label{fig:forearm-first}
+        \caption{ \textbf{Line represents ten percent proportion.}}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\textwidth}
+    \centering
+        \includegraphics[trim = 0 0 0 0,clip,scale=.4]{figures/fac-percent.pdf}
+        \label{fig:forearm-second}
+        \caption{ \textbf{Emphasis on (a).}}
+    \end{subfigure}
+    \vspace{0.1in}
+    \begin{subfigure}[h]{0.5\textwidth}
+    \centering
+        \includegraphics[trim = 0 0 0 0,clip,scale=.4]{figures/h-percent.pdf}
+        \label{fig:hand-first}
+        \caption{ \textbf{Line represents twenty-five percent proportion.}}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\textwidth}
+    \centering
+        \includegraphics[trim = 0 0 0 0,clip,scale=.4]{figures/hc-percent.pdf}
+        \label{fig:hand-second}
+        \caption{ \textbf{Emphasis on (c).}}
+    \end{subfigure}
+    \vspace{2.5mm}
+    \label{fig:forearm-height}
+  \hrule
+\end{figure}
+
+\newpage
+\begin{figure}[!ht]
+	\hrule
+	\caption{ \textbf{Average Height vs Average Wingspan} }
+	\begin{center}
+	    \scalebox{0.50}{	\includegraphics[trim = 0 0 0 0,clip,width=\textwidth]{figures/hw-bar.pdf} }
+	\end{center}
+	\label{fig:hw-bar}
+	\hrule
+\end{figure}
+
+In regard to the relationship between height and arm span, during initial exploration of the data, a correlation between height and arm span was immediately evident\footnote{The initial examination of the male and female covariates revealed a strong correlation between height and arm span. A fairly strong correlation exists between hand length and hand width. It is also worth noting that upper arm and forearm show a moderate uphill correlation. Obvious correlations exist between the right and left side measurements. 
+
+\begin{figure}[!ht]
+  \hrule
+    \caption{ \textbf{Initial Correlation Examination of Male and Female Fields}}
+    \begin{subfigure}[h]{0.5\textwidth}
+    \centering
+            \includegraphics[trim = 0 0 0 0,clip,scale=.5]{figures/male-corr.pdf}
+        \label{fig:male-corr}
+        \caption{ \textbf{Correlation between fields in male data.}}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\textwidth}
+    \centering
+        \includegraphics[trim = 0 0 0 0,clip,scale=.5]{figures/female-corr.pdf}
+        \label{fig:female-corr}
+        \caption{ \textbf{Correlation between fields in female data.}}
+    \end{subfigure}
+    \vspace{2.5mm}
+    \label{fig:m-f-corr}
+  \hrule
+\end{figure}
+
+}.  With a fairly strong Pearson pairwise correlation coefficient (male: .79, female: .81) and Spearman’s rank correlation coefficient (male: .77, female: .80), the relationship between height and arm span is apparent. The assumption of this result, combined with the proportion comparisons, seems to confirm Pollio and Da Vinci’s conclusion that height and arm span remain parallel across a sample of participants. 
+
+\vspace{0.15in}
+\begin{figure}[!ht]
+  \hrule
+  \caption{ \textbf{Correlation Between Height and Arm Span}}
+    \begin{subfigure}[h]{0.5\textwidth}
+    \centering
+    %  trim={<left> <lower> <right> <upper>}
+    % https://shantoroy.com/latex/add-subfig-in-latex/
+            \includegraphics[trim = 0 0 0 0,clip,scale=.4]{figures/male-corrline.pdf}
+        \label{fig:corr-first}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\textwidth}
+    \centering
+        \includegraphics[trim = 0 0 0 0,clip,scale=.4]{figures/female-corrline.pdf}
+        \label{fig:corr-second}
+    \end{subfigure}
+    \vspace{2.5mm}
+    \label{fig:height-span}
+  \hrule
+\end{figure}
+\newpage
+When examining the averages of male and female arm and hand measurements, male measurements were larger than female in all categories. However, when looking at the proportions in respect to the arm length as a whole, both genders were similar. Males’ hands and forearms were, on average, a larger portion of their total arm than females. Females’ upper arm proportion in respect to their total arm was slightly larger than males. See Figure \ref{fig:arm-port}.
+
+\vspace{0.15in}
+\begin{figure}[!ht]
+  \hrule
+  \caption{ \textbf{Male vs Female Arm and Hand Measurements}}
+    \begin{subfigure}[h]{0.5\textwidth}
+    \centering
+    %  trim={<left> <lower> <right> <upper>}
+    % https://shantoroy.com/latex/add-subfig-in-latex/
+            \includegraphics[trim = 0 0 0 0,clip,scale=.5]{figures/arm-percent.pdf}
+        \label{fig:arm-percent}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.5\textwidth}
+    \centering
+        \includegraphics[trim = 0 0 0 0,clip,scale=.5]{figures/arm-bar.pdf}
+        \label{fig:arm-bar}
+    \end{subfigure}
+    \vspace{2.5mm}
+    \label{fig:arm-port}
+  \hrule
+\end{figure}
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+The recognition and acclaim surrounding the Vitruvian Man is not without merit. With a sub-one percent variance for average hand length and average forearm length in respect to height across male and female participants, Vitruvius and Da Vinci’s body ratios hold. The height of an individual is ten times the length of their hand or four times the length of their forearm, regardless of gender. 
+\newline
+\newline
+The correlation between height and arm span also hold true. An average individual’s height is equivalent to their arm span, regardless of gender. Males, on average, have an arm span one percent longer than their height, while females, on average, have an arm span one-half percent shorter than their height. While variations in body measurements of distinct persons can arise, the general notion stands. 
+
+
+
+
+
+
+
+
+
+\newpage
+\section{APPENDICES}
+\label{sec:appendix}
+\subsection{Data Provenance}
+\label{sec:appendix-data-provenance}
+
+Using the code below and all functions documented, my research data maintains a clear path back to the original data set. Each data manipulation is recorded and saved as to maintain levels of cleanliness and progress.\newline \newline
+Beginning with the raw data set, I wrote an initial R function (prepareMeasureData) to convert all non-identification records to lower case and change all units of measurement to centimeters. There were a decent number of ethnicity variation in the set. This function also combined each ethnicity variation into a single variable (e.g. cauciasan, white, and non-hispanic white were all combined into Caucasian.) It also cleaned up the gender field, changing entries that were “m” and “f” to “male” and “female.” All steps of this function are noted within comments in the function itself. \newline \newline
+After the initial cleaning function, I ran the updated measure_prep dataset through two functions (sep_Male and sep_Female) to separate the male and female participant data. I had to use two different functions since R does not allow for multiple variables to be returned from a function. These functions take the dataframe and subset it on gender. The local variables measure_male and measure_female hold the full, partially cleaned dataframes for each gender. \newline \newline
+Next, the gender specific datasets are processed using the function arm_measurementsSubset. This function pulls only the variables I need for this project. Height, left and right hand length, left and right hand width, left and right forearm length, left and right upper arm length, and arm span are extracted and saved in a new dataframe. Here, I removed NAs from the new data set. I waited until after I selected my fields to remove the NA values as to increase the data set size. This function also located and removed all outliers within the data. The new cleaned dataframes are stored in variables final_male and final_female. All steps of this function are noted within the comments in the function itself. \newline \newline
+The final function that transforms the data is average_Dataframe. This function gathers the average of each column of the passed dataframe and places them in their own dataframe. All measurements that are individually labeled left and right are averaged together into one field. Additional fields are also calculated in this function. Average arm length is determined using hand length, forearm length, and upper arm length. A percentage of the average arm length is also calculated for hand length, forearm length, and upper arm length. All four of these new fields are stored in the returned dataframe. The final_male and final_female dataframes were passed into this function separately to create two dataframes and then combined into a single m_f_avg dataframe. Gender is not documented in the dataframe itself, but comments within the function specify row 1 as male and row 2 as female. 
+
+
+\newpage
+\subsubsection{Data Collection Handout}
+\label{sec:appendix-data-handout}
+\begin{figure}[!ht]
+	\hrule
+	\caption{ \textbf{Handout Page 1} }
+	\begin{center}
+	    \scalebox{1.00}{	\includegraphics[trim = 0 0 0 0,clip,width=0.85\textwidth]{pdfs/handout_vickers_1.pdf} }
+	\end{center}
+	\label{fig:handout-1}
+	\hrule
+\end{figure}
+\newpage
+\begin{figure}[!ht]
+	\hrule
+	\caption{ \textbf{Handout Page 2} }
+	\begin{center}
+	    \scalebox{1.00}{	\includegraphics[trim = 0 0 0 0,clip,width=0.85\textwidth]{pdfs/handout_vickers_2.pdf} }
+	\end{center}
+	\label{fig:handout-2}
+	\hrule
+\end{figure}
+\newpage
+
+\subsection{Preparing the Report Workspace as a subsection}
+\label{sec:appendix-setup}
+\subsubsection{Preparing the Report Workspace as a subsubsection}
+\label{sec:appendix-setup2}
+\paragraph{Preparing the Report Workspace as a paragraph}
+\label{sec:appendix-setup3}
+\subparagraph{Preparing the Report Workspace as a subparagrah}
+\label{sec:appendix-setup4}
+Below is the necessary functions and libraries required to run the code referenced in this document.
+```{r,appendix-setup,message=FALSE}
+library(devtools);       # required for source_url
+path.humanVerseWSU = "https://raw.githubusercontent.com/MonteShaffer/humanVerseWSU/"
+source_url( paste0(path.humanVerseWSU,"master/misc/functions-project-measure.R") );
+```
+
+Below is the code to load the data and prepare it for analysis.
+
+```{r,appendix-secret,message=FALSE}
+path.project = "C:/_git_/WSU_STATS419_FALL2020/Final/";
+path.to.secret.0 = "C:/Users/Alexander Nevsky/Dropbox/WSU-419/Fall 2020/";
+path.to.secret = paste0(path.to.secret.0,"__student_access__/_SECRET_/");
+path.github = "https://raw.githubusercontent.com/omegadawning/WSU_STAT419_FALL2020/";
+path.data = "https://github.com/omegadawning/WSU_STAT419_FALL2020/datasets/";
+measure = read.csv("./measure-students.txt", header=TRUE, quote="", sep="|")
+source_url( paste0(path.github,"master/functions/functions-project-measure.R") );
+
+# copy of original data
+original_measure <- measure;
+# summary(original_measure);
+# dim(original_measure);
+
+# prepare data by converting to lower case, converting to cm from inches,
+# removing duplicates,  and cleaning up gender and ethnicities
+measure_prep <- prepareMeasureData(measure);
+#measure_prep;
+
+# split data into two dataframes, male and female
+measure_male <- sep_Male(measure_prep);
+measure_female <- sep_Female(measure_prep);
+
+# measure_male; # full male measurements
+# measure_female; # full female measurements
+
+```
+
+Below is the code to separate the data into male and female.
+
+```{r,appendix-separate,message=FALSE}
+
+# subset height, hand measurements, arm measurements, wingspan
+# remove NAs, now that the measurements being used have been selected
+# locate and remove outliers 
+final_male <- arm_measurementsSubset(measure_male);
+final_female <- arm_measurementsSubset(measure_female);
+# final_male; # final measurements for male
+# final_female; # final measurements for female
+
+col_names <- colnames(final_male);
+
+```
+
+Below is the code to generate and save mixed correlation graphs located in Section \ref{sec:appendix-setup2}.
+
+```{r,appendix-mixed-corr,message=FALSE}
+# exploring data
+library(corrplot);
+
+path.project.1 = "D:/Users/Omegadawning/Desktop/School/Fall_2020/Multivariate_Stat/";
+path.project.2 = paste0(path.project.1,"_git_/WSU_STAT419_FALL2020/Project/");
+path.figures = paste0(path.project.2,"figures/");
+  createDirRecursive(path.figures);
+
+file.male.corr = paste0(path.figures,"male-corr.pdf");
+file.female.corr = paste0(path.figures,"female-corr.pdf");
+
+corr_male <- cor(final_male);
+corr_female <- cor(final_female);
+
+pdf(file.male.corr);
+corrplot.mixed(corr_male, lower.col="black", tl.pos="lt", tl.col="red", 
+               tl.cex=.7, diag="u", upper="shade");
+dev.off();
+pdf(file.female.corr);
+corrplot.mixed(corr_female, lower.col="black", tl.pos="lt", tl.col="red", 
+               tl.cex=.7, diag="u", upper="shade");
+dev.off();
+
+```
+Below is the code to calculate Spearman's rank correlation between arm span and height for each gender referenced in \ref{sec:findings}.
+
+```{r,appendix-corr-test,message=FALSE}
+cor.test(final_male$height.NA, final_male$arm.span.NA, method="spearm", 
+         alternative="g", exact=FALSE);
+cor.test(final_female$height.NA, final_female$arm.span.NA, method="spearm", 
+         alternative="g", exact=FALSE);
+```
+Below is the code to generate dataframes containing the average measurements for each gender.
+
+```{r,appendix-average,message=FALSE}
+
+# gather the averages of all male and female variables and put them in a dataframe
+# all left and right sides are averaged together
+# calculate average arm length by combining hand, forearm and upper arm
+# calculate percentage of total arm from each arm measurement 
+avg_m <- average_Dataframe(final_male);
+avg_f <- average_Dataframe(final_female);
+
+# combine individual dataframes
+# row 1 male; row 2 female
+# genders are unlabeled for plotting
+m_f_avg <- rbind(avg_m, avg_f);
+
+# row names for legend
+row.names(m_f_avg) <- c("male","female");
+
+```
+
+Below is the code to generate and save plots of arm span against height with correlation lines. These graphs are located in Section \ref{sec:findings}.
+
+```{r,appendix-corr-line,message=FALSE}
+
+file.male.corrline = paste0(path.figures,"male-corrline.pdf");
+file.female.corrline = paste0(path.figures,"female-corrline.pdf");
+
+make_bar_plots(m_f_avg);
+
+pdf(file.male.corrline);
+plot(final_male$arm.span.NA, final_male$height.NA, 
+     main="Correlation Between Height and Arm Span in Males",
+     xlab="Length of Arm Span (cm)",
+     ylab="Height (cm)");
+abline(lm(final_male$height.NA~final_male$arm.span.NA), col="red", lwd=3);
+dev.off();
+
+pdf(file.female.corrline);
+plot(final_female$arm.span.NA, final_female$height.NA, 
+     main="Correlation Between Height and Arm Span in Females",
+     xlab="Length of Arm Span (cm)",
+     ylab="Height (cm)");
+abline(lm(final_female$height.NA~final_female$arm.span.NA), col="red", lwd=3);
+dev.off();
+
+```
+
+```{r,appendix-hist,message=FALSE}
+# create and save histograms
+file.male.hist = paste0(path.figures,"male-hist.pdf");
+file.female.hist = paste0(path.figures,"female-hist.pdf");
+
+# create male height histogram from final male dataframe
+# save as pdf
+pdf(file.male.hist);
+hist(final_male$height.NA, main="Histogram of Male Heights", xlab="Height (cm)", 
+     col="dark green");
+dev.off();
+
+# create female height histogram from final female dataframe
+# save as pdf
+pdf(file.female.hist);
+hist(final_female$height.NA, main="Histogram of Female Heights", 
+     xlab="Height (cm)", col="gold");
+dev.off();
+
+```
+Below is the code to calculate the proportion percentages compared to Da Vinci's Vitruvian Man referenced in Section \ref{sec:findings}.
+
+```{r,appendix-proportion,message=FALSE}
+# calculate proportions from average measurements
+# to compare to da vinci proportions
+male_hand_per <- (m_f_avg$avg.height[1]/10);
+female_hand_per <- (m_f_avg$avg.height[2]/10);
+
+# save hand length in variables
+mh <- m_f_avg$avg.hand.length[1];
+fh <- m_f_avg$avg.hand.length[2];
+
+# average hand length percentage of height (male)
+# compare to 10% vitruvian man
+(mh/m_f_avg$avg.height[1])*100;
+
+# average hand length percentage of height (female)
+# compare to 10% vitruvian man
+(fh/m_f_avg$avg.height[1])*100;
+
+m_f_avg_forearm <- m_f_avg[,c(1,4)];
+male_fore_per <- (m_f_avg$avg.height[1]/4);
+female_fore_per <- (m_f_avg$avg.height[2]/4);
+
+# save forearm length in variables
+mf <- m_f_avg$avg.hand.elbow[1];
+ff <- m_f_avg$avg.hand.elbow[2];
+
+# average forearm length percentage of height (male)
+# compare to 25% vitruvian man
+(mf/m_f_avg$avg.height[1])*100;
+
+# average forearm length percentage of height (female)
+# compare to 25% vitruvian man
+(ff/m_f_avg$avg.height[2])*100;
+
+# average arm span percentage of height (male)
+# compare to 100% vitruvian man
+(m_f_avg$avg.span[1]/m_f_avg$avg.height[1])*100;
+# average arm span percentage of height (male)
+# compare to 100% vitruvian man
+(m_f_avg$avg.span[2]/m_f_avg$avg.height[2])*100;
+
+```
